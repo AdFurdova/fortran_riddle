@@ -25,7 +25,7 @@ contains
   subroutine decrypt(key)
     implicit none
     integer :: key, i, y, position, resultIndex
-    character(62) :: alphabet
+    character(61) :: alphabet
     character(len=100) :: encryptedValue
     character(1) :: currentChar, decodedChar
 
@@ -40,6 +40,9 @@ contains
       do y = 1, len(alphabet)
         if (alphabet(y:y) == currentChar) then
           position = y-key
+          ! Checking overflow
+          position = position - len(alphabet) * &
+                                floor(1.0_4 * (position - 1_4) / len(alphabet))
           exit
         end if
       end do
